@@ -1,0 +1,323 @@
+---
+title: "Data_Cleaning"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem and Approach
+AS Roma provided data to our team with the expectation we find patterns that can be exploited to increase success on the field and provide the club a competitive advantage over its opponents in future matches. 
+
+AS Roma is a perennial championship contender in Serie A, one of Europe’s most prestigious leagues. In the seasons spanning from 2009 to 2016 AS Roma had an average finishing position of 4.25 out of a total of 20 teams in the top Italian league, Serie A.  For teams like AS Roma, pre-season goals often include milestones like defeating its biggest rivals, earning invitations to the Champions League tournament and ultimately winning league titles.
+
+With the lofty expectations of the club in mind, we have structured our analysis around what we believe is the best opportunity for AS Roma to earn more points each season leading to an increased final rank in the league standings. We believe AS Roma’s best opportunity to increase its point output in future seasons is to improve its performance in close matches. By displaying moderate improvement in just a few of these matches each year AS Roma will see major results including more Champions League Tournament qualifications and league titles.
+
+Ultimately we believe that there are certain matches each season that is likely to be won or lost by a large margin of goals due to the variation in team payrolls and abilities across the league. The close matches, however, present AS Roma with an opportunity to increase their point totals and subsequently their rank in the Serie A standings. In the following analysis, we illustrate the large impact of better performance in close matches each season. We then explore how AS Roma can adjust its tactics and on field strategies to maximize its performance in these close matches.
+
+## Load packages
+Load the data
+load required packages
+```{r cars, message=FALSE}
+library(dplyr)
+library(magrittr)
+library(arules)
+library(RSQLite)
+library(assertive)
+library(lubridate)
+library(xml2)
+library(XML)
+library(tidyverse)
+library(XML)
+library(magrittr)
+library(graphics)
+library(gridExtra)
+library(rlist)
+```
+
+# Data Loading
+Load data from the sqlite database, and bring tables into local memory
+```{r pressure, echo=FALSE}
+con <- src_sqlite("euro_soccer.sqlite")
+country_tbl <- tbl(con, "country")
+league_tbl <- tbl(con, "league")
+match_tbl <- tbl(con, "match")
+player_tbl <- tbl(con, "player")
+player_atts_tbl <- tbl(con, "player_attributes")
+team_tbl <- tbl(con, "team")
+team_atts_tbl <- tbl(con, "team_attributes")
+country_tbl <- collect(country_tbl)
+league_tbl <- collect(league_tbl)
+match_tbl <- collect(match_tbl)
+player_tbl <- collect(player_tbl)
+player_atts_tbl <- collect(player_atts_tbl)
+team_tbl <- collect(team_tbl)
+team_atts_tbl <- collect(team_atts_tbl)
+```
+
+For this analysis, we choose to focus on the team Roma, therefore, we filter all matches related to Roma in the match table In these matches, Roma play either as a home team or as an away team
+
+```{r}
+team_name <- 'Roma'
+roma_api <- team_tbl$team_api_id[(team_tbl$team_long_name == team_name)]
+```
+
+Currently, since we do not care all the columns in the match table, we start with getting the desired columns of Roma that we want to use
+
+```{r}
+col <- c('id', 'match_api_id', 'date', 'stage', 'season', 'home_team_api_id', 'away_team_api_id', 'home_team_goal','away_team_goal')
+roma_table <- match_tbl %>% select(col) %>% filter(home_team_api_id == roma_api | away_team_api_id == roma_api)
+
+```
+
+## Data transformation
+It's important to understand that from Roma perspective, whether it is playing a home game or away game; so in this step, we add a new column called "home_away" to show this factor
+```{r}
+roma_table$opponent <- roma_table$home_team_api_id + roma_table$away_team_api_id - 8686
+roma_table$home_away <- sapply(roma_table$home_team_api_id, function(x) if (x == 8686) x = 'home' else x = 'away') 
+```
+
+Deal with the date column and create a year column
+```{r}
+roma_table$date <- ymd_hms(roma_table$date)
+roma_table$year <- year(roma_table$date)
+```
+
+In order to get the actual scores for each match played by Roma, we need to calculate the difference between goals. In this step, we calculate the match score from Roma perspective (negative means "loss", zero means "draw", positive means "win")
+```{r}
+score <- c()
+for (i in (1:nrow(roma_table))) {
+  if (roma_table$home_away[i] == 'home') score <- c(score, roma_table$home_team_goal[i] - roma_table$away_team_goal[i]) else score <- c(score, roma_table$away_team_goal[i] - roma_table$home_team_goal[i])
+}
+roma_table$score <- score
+```
+
+Addition of team attributes: the meaning of this step is that we want to explore how team attributes of both Roma and its opponent influence the final match results; therefore, we merge the match table with the team attributes table, based on the unique team_api_id of both home and away team
+
+```{r}
+# Team attribute table preparation - for further merging
+team_atts_tbl_selected <- team_atts_tbl %>% select_if(is.character)
+team_atts_tbl_selected$team_api_id <- team_atts_tbl$team_api_id
+team_atts_tbl_selected$date <- ymd_hms(team_atts_tbl$date) 
+team_atts_tbl_selected$year <- year(team_atts_tbl_selected$date)
+
+# When Roma play as "home"
+roma_home_match <- roma_table %>% filter(home_away == 'home')
+df_match_1 <- merge(x=roma_home_match, y=team_atts_tbl_selected, by.x=c('home_team_api_id', 'year'), by.y=c('team_api_id', 'year'), all.x = TRUE)
+# change the column name
+attribute_name <- names(df_match_1)[14:26]
+name <- c()
+for (i in names(df_match_1)) {
+  if (i %in% attribute_name) name <- c(name, paste(i,'roma', sep = '_')) else name <- c(name, i)
+}
+names(df_match_1) <- name
+
+df_match_2 <- merge(x=roma_home_match, y=team_atts_tbl_selected, by.x=c('away_team_api_id', 'year'), by.y=c('team_api_id', 'year'), all.x = TRUE)
+# change the column name
+attribute_name <- names(df_match_2)[14:26]
+name <- c()
+for (i in names(df_match_2)) {
+  if (i %in% attribute_name) name <- c(name, paste(i,'opponent', sep = '_')) else name <- c(name, i)
+}
+names(df_match_2) <- name
+
+# Semi-final result 
+df_match_1[27:39] <- df_match_2[14:26]
+
+# ------------------------------------------------------------------------------------------------------------------------------
+
+# When Roma play as "away"
+roma_away_match <- roma_table %>% filter(home_away == 'away')
+df_match_3 <- merge(x=roma_away_match, y=team_atts_tbl_selected, by.x=c('away_team_api_id', 'year'), by.y=c('team_api_id', 'year'), all.x = TRUE)
+# change the column name
+attribute_name <- names(df_match_3)[14:26]
+name <- c()
+for (i in names(df_match_3)) {
+  if (i %in% attribute_name) name <- c(name, paste(i,'roma', sep = '_')) else name <- c(name, i)
+}
+names(df_match_3) <- name
+
+df_match_4 <- merge(x=roma_away_match, y=team_atts_tbl_selected, by.x=c('home_team_api_id', 'year'), by.y=c('team_api_id', 'year'), all.x = TRUE)
+# change the column name
+attribute_name <- names(df_match_4)[14:26]
+name <- c()
+for (i in names(df_match_4)) {
+  if (i %in% attribute_name) name <- c(name, paste(i,'opponent', sep = '_')) else name <- c(name, i)
+}
+names(df_match_4) <- name
+
+# Semi-final result 
+df_match_3[27:39] <- df_match_4[14:26]
+
+# ------------------------------------------------------------------------------------------------------------------------------
+
+# Finally, we merge the "home" & "away" tables that we get previously
+df <- merge(df_match_1, df_match_3, by.x=names(df_match_1), by.y=names(df_match_3), all = TRUE)
+```
+
+It will be more intuitive if we can see the actual name of Roma's opponent team, instead of team_api_id; Therefore, in this step, we add one new column "opponent_team" based on the information in both match and team table
+
+```{r}
+team_tbl_select <- team_tbl[c('team_api_id','team_long_name')]
+df_new <- merge(df, team_tbl_select, by.x=c('away_team_api_id'), by.y=c('team_api_id'), all.x = TRUE)
+names(df_new)[40] <- 'opponent_team'
+
+# There are some columns which are not inportant for further analysis, so we drop the unrelated columns here
+drop_column <- c('away_team_api_id','home_team_api_id','date.x','date.y_roma','date.y_opponent','home_team_goal','away_team_goal','date.y')
+df_semi_final <-  df_new[,!(names(df_new) %in% drop_column)]
+```
+
+We also assume that the team formation choice may influences the match result; therefore, in this step we add the team formation information and get the final table
+
+```{r}
+team_formation <- read.csv('team_formation.csv')
+df_final <- merge(df_semi_final, team_formation, by.x=c('id'), by.y=c('id'), all = TRUE)
+
+# Final table cleaning
+drop_column_final <- c('X', 'opponent')
+df_final <-  df_final[,!(names(df_final) %in% drop_column_final)]
+df_final <- df_final[,c(3,1,2,4,5:7,32,8:31,33:62)]
+```
+
+
+## Situation Overview
+
+### Improvement Potential
+
+From 2008 to 2016, AS Roma draws an average of 9 matches, and loses 5 matches by just one goal each season. Assuming all else fixed, and ignoring the additional adjustments that would need to be made to their opponents point totals, if Roma were to just score one more goal in 30% of these matches, effectively turning a draw into a win and a one-goal loss into a draw,  their average rank would have increased from 4.25 to 3rd in Serie A. In the top Italian league, the three highest-ranking teams qualify for the Champions League tournament at the end of each season. By increasing its rank by an average of 1.25 per season, AS Roma would significantly increase its chances at Champions League qualification each season and in its highest-performing years, compete for a Serie A regular-season championship. 
+
+```{r, message=FALSE}
+# League Table Line Graph
+    lg_tbl = read_csv('lg_tbl.csv', col_names = TRUE)
+```
+
+```{r}
+    ggplot(lg_tbl, aes(Season, Rank, group = RankType, color = RankType)) +
+      geom_line(aes(linetype=RankType)) +
+      scale_linetype_manual(values=c("solid", "dashed", "solid")) +
+      scale_color_manual(values=c('black','red', 'blue' )) +
+      geom_point() +
+      labs(x = 'Season', title = "Results With Hypothetical Close Match Outcomes")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+As shown above, a moderate improvement in just a few games per season from 2008 to 2016 would have led AS Roma to some significant achievements, including a Champions League qualification in 2016, and a league title in 2009.
+
+### Subset of Data
+
+To subset our analysis for these close matches, we first selected all matches that AS Roma participated in both home and away. Next, we selected matches won by a single goal (i.e. AS Roma: 2 - AC Milan: 1), matches drawn and matches lost by a single goal (i.e. AS Roma: 1 - AC Milan: 2). While we acknowledge the possibility of late goals being scored, excluding a truly close game from our analysis, our domain knowledge suggests that this is rare.
+
+Looking at the split of our data, we see that a sizeable chunk of our matches each season are decided by one goal or less. As we proceed, we will explore the differences in each of our close match categories to see how we can perform better and hopefully change the outcome of close matches moving forward.
+
+### Application of Analysis
+
+For our analysis and recommendations to be useful for AS Roma, we must ensure that the findings are applied to the correct matches in future seasons. To do this, AS Roma must be able to predict which will be “close matches”, and make the necessary adjustments in only these contests.
+
+To identify such matches we first investigate which opponents AS Roma has historically competed in close matches against. This is a good predictor because it strictly focuses on past results and therefore inherently captures information that our tables cannot such as rivalries, intangibles etc.
+
+```{r, message=FALSE}
+    roma_matches = read_csv('apriori_table.csv', col_names = TRUE)
+```
+
+```{r}
+    # Define close matches
+    # Group opponent teams and determine who close matches are played against
+    roma_matches = roma_matches %>% select(score, opponent_team)
+    roma_matches$close <- ifelse(roma_matches$score >= -1 & roma_matches$score <= 1 , 1, 0)
+    opps = roma_matches %>% group_by(opponent_team) %>% 
+                    summarise(total = n(),close = sum(close))
+    opps = opps %>% mutate(close_percent = (close / total)) %>% 
+                    filter(close_percent > .5 & total > 10)
+    opps = opps %>% arrange(desc(close_percent))
+    print(opps)
+```
+
+We see that there are common opponents that each year that AS Roma competes in close matches against. We will revisit the application of our recommendations in the conclusion, but it is important to keep in mind as we move forward with our analysis.
+
+In addition, it is worth noting that the betting odds are another good method of predicting whether or not a match will be close. Conversely to match history, the betting odds include all numerical factors influencing the match such as team ability, injuries and home/away splits.
+
+AS Roma can utilize both match history and betting odds before each match to determine if they believe it will be a close match. The coaching staff can then utilize recommendations to prepare the team accordingly.
+
+In the following analysis sections, we identify which strategies AS Roma can utilize in matches they believe exhibit a high likelihood of being close. We have divided our analysis into two main parts. The overall team level attributes are considered in the first analysis giving a comprehensive view of the team. The player level analysis gives a granular understanding of the team. The recommendations thus provided assist the coach holistically. 
+
+
+## Association rule for Team attributes - Close Games
+
+
+In this section, we choose to focus on the "close" games, including all wins, draws and loss. Our definition of "close" is the final match -2 < score < 2 from Roma perspective. The reason we focus on match is that ......(I think Patrick's graph shows the reason at here)
+```{r}
+# Load the dataset
+df_pat <- read.csv('None_team_attributes.csv')
+# Filter for the close game
+df_pat <- df_pat %>% filter(score >= -1 & score <= 1)
+# Convert numeric score to categorical class: "L" for loss, "D" for draw and "W" for wins
+df_pat$score <- ifelse(df_pat$score < 0, 'L',ifelse(df_pat$score == 0, 'D', 'W'))
+```
+
+Then we want to explore how team attributes influence the close matches results
+```{r}
+# Team numeric attributes preparation
+team_atts_tbl_selected_1 <- team_atts_tbl %>% select_if(negate(is.character))
+team_atts_tbl_selected_1$team_api_id <- team_atts_tbl$team_api_id
+team_atts_tbl_selected_1$date <- ymd_hms(team_atts_tbl$date) 
+team_atts_tbl_selected_1$year <- year(team_atts_tbl_selected_1$date)
+team_atts_tbl_selected_home <- team_atts_tbl_selected_1 %>% filter(team_api_id == 8686)
+
+# Merge the datasets
+df_pat_final <- merge(df_pat, team_atts_tbl_selected_home, by.x=c('year'), by.y=c('year'), all.x = TRUE)
+df_pat_anova <- merge(df_pat_final, team_atts_tbl_selected_1, by.x=c('year','away_team_api_id'), by.y=c('year','team_api_id'), all.x = TRUE)
+df_pat_anova <- df_pat_anova[,c(1,4,5,6,7,9,10,14:22,26:34)]
+```
+
+Instead of focusing on the absolute level of team attributes, we think that the relative strengths and weakness may have more exlaining power for the final match's result. Therefore, in this step, we calculate the difference of team attributes scores between Roma and its opponents. And then we categorize them into five levels - "Very strong", "Strong", "Balance", "Weak", "Very Weak". The relative strengths and weakness level should be interpreted from Roma perspective. For instance, Roma have "Strong" BuildUpPalyPassing team attribute compared to its opponent.
+
+```{r}
+# Calculate the difference of attributes
+for (i in c(8:16)) {
+  df_pat_anova[i] <- df_pat_anova[i] - df_pat_anova[i+9]
+}
+df_anova_diff <- df_pat_anova[,c(1:16)]
+
+# Clean the column name
+old <- names(df_anova_diff)
+for (i in c(8:16)) {
+  old[i] <- substr(old[i],1,nchar(old[i])-2)
+}
+names(df_anova_diff) <- old
+
+# Create categories 
+for (i in 8:16) {
+  df_anova_diff[i] <- ifelse(df_anova_diff[i] > 20, 'Very Strong',
+                             ifelse(df_anova_diff[i] > 10, 'Strong', 
+                                    ifelse(df_anova_diff[i] > 0, 'Balance',
+                                           ifelse(df_anova_diff[i] > -20, 'Weak', 'Very Weak'))))
+}
+
+# Select the desired columns
+df_apri_DL <- df_anova_diff %>% filter(score %in% c('D','L','W'))
+df_apri_DL <- df_apri_DL[,c(5,6,8:16)]
+```
+
+### Start Apriori association rule exploration
+```{r}
+# Start association rule
+df_apri <- as(df_apri_DL, 'transactions')
+
+# Basic exploration
+# inspect(df_apri)
+# itemFrequencyPlot(df_apri)
+```
+
+### Get the rules
+```{r}
+# Note support is set very low, because even the most frequent item appears infrequently
+rules <- apriori(df_apri, parameter=list(supp = 0.021, conf=1))
+
+rules <- rules %>%
+  subset(subset = (rhs %pin% "score=L") | rhs %pin% "score=D" | rhs %pin% "score=W") %>%
+  #subset(subset = (lhs %pin% 'buildUpPlayDribbling')) %>% 
+  sort(by=c('lift'), decreasing = TRUE)
+
+```
+

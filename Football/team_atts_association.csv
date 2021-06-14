@@ -1,0 +1,105 @@
+LHS,RHS,support,confidence,lift,count
+"{buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationShooting=Strong,defencePressure=Weak}",{score=L},0.021621621621621623,1,5.138888888888889,4
+"{home_away=away,buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationShooting=Strong}",{score=L},0.02702702702702703,1,5.138888888888889,5
+"{buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak}",{score=L},0.021621621621621623,1,5.138888888888889,4
+"{home_away=away,buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationShooting=Strong,defencePressure=Weak}",{score=L},0.021621621621621623,1,5.138888888888889,4
+"{home_away=away,buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong}",{score=L},0.021621621621621623,1,5.138888888888889,4
+"{home_away=away,buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak}",{score=L},0.021621621621621623,1,5.138888888888889,4
+"{chanceCreationCrossing=Very Strong,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayDribbling=Weak,chanceCreationPassing=Very Strong,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayDribbling=Weak,chanceCreationPassing=Very Strong,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayDribbling=Weak,defencePressure=Weak,defenceAggression=Weak}",{score=D},0.02702702702702703,1,2.5342465753424657,5
+"{buildUpPlayPassing=Strong,chanceCreationCrossing=Weak,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationCrossing=Very Strong,chanceCreationShooting=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationCrossing=Very Strong,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak}",{score=D},0.032432432432432434,1,2.5342465753424657,6
+"{chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayDribbling=Weak,chanceCreationPassing=Very Strong,defencePressure=Weak,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayDribbling=Weak,defencePressure=Weak,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationCrossing=Very Strong,chanceCreationShooting=Weak,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlaySpeed=Strong,chanceCreationCrossing=Weak,defencePressure=Balance}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlaySpeed=Strong,buildUpPlayPassing=Weak,chanceCreationPassing=Strong}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.032432432432432434,1,2.5342465753424657,6
+"{chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,chanceCreationPassing=Strong,chanceCreationShooting=Weak,defencePressure=Balance}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,chanceCreationCrossing=Weak,chanceCreationShooting=Weak,defencePressure=Balance}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlayPassing=Weak,chanceCreationPassing=Balance,chanceCreationShooting=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlaySpeed=Strong,chanceCreationPassing=Strong,chanceCreationCrossing=Weak,defencePressure=Balance}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlaySpeed=Strong,buildUpPlayPassing=Weak,chanceCreationPassing=Strong,chanceCreationCrossing=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,chanceCreationPassing=Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Weak,defencePressure=Balance}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=home,buildUpPlayPassing=Weak,chanceCreationPassing=Balance,chanceCreationShooting=Weak,defenceAggression=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{buildUpPlayPassing=Balance,chanceCreationPassing=Very Strong,chanceCreationShooting=Strong,defencePressure=Weak,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Weak,chanceCreationShooting=Strong,defencePressure=Weak,defenceTeamWidth=Weak}",{score=D},0.021621621621621623,1,2.5342465753424657,4
+"{defenceAggression=Very Weak,defenceTeamWidth=Strong}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{buildUpPlayPassing=Very Weak,defenceAggression=Very Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{buildUpPlaySpeed=Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,defenceAggression=Very Weak}",{score=W},0.04864864864864865,1,2.4342105263157894,9
+"{buildUpPlayPassing=Balance,chanceCreationShooting=Balance}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{home_away=home,defenceAggression=Very Weak,defenceTeamWidth=Strong}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{home_away=home,defencePressure=Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlayPassing=Very Weak,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,chanceCreationPassing=Very Strong,defenceAggression=Very Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{home_away=home,buildUpPlayPassing=Weak,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlayPassing=Balance,chanceCreationShooting=Balance,defenceAggression=Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{home_away=home,buildUpPlaySpeed=Very Strong,chanceCreationCrossing=Very Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{chanceCreationShooting=Strong,defencePressure=Strong,defenceAggression=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Balance,chanceCreationPassing=Balance,chanceCreationCrossing=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,chanceCreationPassing=Balance,chanceCreationShooting=Balance}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,chanceCreationPassing=Balance,defencePressure=Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{buildUpPlayPassing=Weak,chanceCreationPassing=Balance,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,chanceCreationPassing=Very Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlayPassing=Weak,chanceCreationPassing=Very Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,chanceCreationPassing=Very Strong,chanceCreationCrossing=Very Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,chanceCreationCrossing=Very Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,chanceCreationPassing=Very Strong,defencePressure=Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,defencePressure=Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{chanceCreationShooting=Strong,defencePressure=Strong,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,chanceCreationPassing=Very Strong,chanceCreationCrossing=Strong,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Balance,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defenceAggression=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Balance,buildUpPlayPassing=Weak,chanceCreationCrossing=Weak,defenceAggression=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayDribbling=Very Weak,chanceCreationPassing=Balance,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayDribbling=Very Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defencePressure=Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{buildUpPlaySpeed=Weak,chanceCreationPassing=Balance,defencePressure=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationPassing=Balance}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,chanceCreationPassing=Balance,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlayPassing=Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,chanceCreationCrossing=Weak,chanceCreationShooting=Weak,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,chanceCreationShooting=Weak,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,chanceCreationPassing=Very Strong,defenceAggression=Very Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,chanceCreationPassing=Very Strong,chanceCreationCrossing=Very Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=home,buildUpPlaySpeed=Very Strong,buildUpPlayPassing=Weak,chanceCreationPassing=Very Strong,defencePressure=Strong}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayDribbling=Very Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defencePressure=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationPassing=Balance,chanceCreationCrossing=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationPassing=Balance,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,chanceCreationCrossing=Weak,chanceCreationShooting=Weak,defencePressure=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationCrossing=Weak,defencePressure=Weak,defenceTeamWidth=Weak}",{score=W},0.02702702702702703,1,2.4342105263157894,5
+"{home_away=away,buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,defencePressure=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationShooting=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{home_away=away,buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationCrossing=Weak,defencePressure=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
+"{buildUpPlaySpeed=Weak,buildUpPlayPassing=Weak,chanceCreationCrossing=Weak,defencePressure=Weak,defenceAggression=Weak,defenceTeamWidth=Weak}",{score=W},0.021621621621621623,1,2.4342105263157894,4
