@@ -1,0 +1,103 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+# Load the required packages
+library(dplyr)
+library(data.table)
+library(magrittr)
+library(lubridate)
+library(scales)  
+library(ggplot2)
+```
+
+```{r}
+# Set the working directory
+setwd("~/Desktop/6410 - Exploratory/HW 2")
+# Load the file
+df_original <- fread('SunCountry.csv', header = TRUE)
+
+# Filter for the Sun Country & Basic 
+df_original <- df_original %>% filter(MarketingAirlineCode == 'SY')
+df_start <- df_original
+df_start$ServiceStartDate <- ymd(df_start$ServiceStartDate)
+df_start$Service_Month <- month(df_start$ServiceStartDate)
+# generalize the booking channels by merging some airport bookings together, which has <1000 orders
+main_channel_name <- unique(df_start$BookingChannel)[c(1:5)]
+# create a new coloumn show the generalized channels 
+df_start$Book_Channel <- sapply(df_start$BookingChannel, function(x) if (!(x %in% main_channel_name)) {'Airport Booking'} else {x})
+'%notin%' <- Negate('%in%')
+```
+
+
+
+```{r}
+# Question 1:
+# Data preparation
+df_age <- df_start[!is.na(df_start$Age),]
+df_age <- filter(df_age, Age >= 0 & Age <= 100)
+df_age <- filter(df_age, GenderCode %in% c('F', 'M'))
+df_age$UflyMemberStatus[df_age$UflyMemberStatus == ''] <- 'Non-Member'
+df_age$UflyMemberStatus_factor <- factor(df_age$UflyMemberStatus, levels = c('Non-Member', 'Standard', 'Elite'))
+
+# Graph 1: Age distribution
+num_row <- nrow(df_age)
+ggplot(df_age, aes(x=Age)) + 
+  geom_histogram(aes(y = ..density..)) + 
+  labs(x = 'Customer Age', y = 'Number of Customer', title = 'SY Customer Age Distribution') + theme_classic() + 
+  scale_y_continuous(name = 'Proportion', sec.axis = sec_axis(~. * num_row, name = 'Number of Customers', labels = comma)) + geom_density(col=2) + theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
+```
+
+
+```{r}
+# Graph 2: Age, Facet by membership 
+
+ggplot(df_age, aes(Age, fill = GenderCode)) + geom_bar(aes(y = (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), binwidth = 4) + 
+  facet_grid(. ~ UflyMemberStatus_factor) + 
+  ylab('Customer Proportion') + xlab('Customer Age') + 
+  theme(panel.spacing = unit(1, "lines")) + scale_y_continuous(labels = percent_format())
+```
+
+
+```{r}
+# Question 2: what are customers traveling tendencies 
+
+# Graph 1: Booking channels
+
+ggplot(df_start, aes(x=Book_Channel)) + geom_bar(fill = 'pink') + 
+  labs(x = 'Booking Channels', y = 'Number of Bookings', title = 'Booking Channel Distribution') +
+  scale_y_continuous(label=comma) + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1), plot.title = element_text(hjust = 0.5, face = 'bold')) 
+```
+
+
+```{r}
+# Graph 2: Followed by Graph 1 - dig deeper into 'outside booking' and 'website booking'
+df_channel <- filter(df_age, Book_Channel %in% c('Outside Booking', 'SCA Website Booking'))
+
+ggplot(df_channel, aes(Age)) + geom_histogram(stat = 'count') + facet_grid(.~Book_Channel) + 
+  ylab('Number of Bookings') + xlab('Customer Age') + theme(panel.spacing = unit(2, 'lines')) + 
+  scale_y_continuous(labels = comma)
+```
+
+
+
+```{r}
+# Graph 3: Destination
+top_dest <- names(sort(table(df_start$ServiceEndCity),decreasing = TRUE)[2:10])
+data_2 <- filter(df_start, ServiceEndCity %in% top_dest)
+
+ggplot(data_2, aes(Service_Month)) + geom_line(stat = 'count') + facet_wrap(. ~ ServiceEndCity, ncol=3) +
+  scale_x_discrete(name = "Traveling Month", limits = c(1:12)) + 
+  ylab('Number of Bookings') + ggtitle('Customer Traveling Patterns') + 
+  theme(plot.title = element_text(face = 'bold', hjust = 0.5)) 
+```
+
+
