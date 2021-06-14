@@ -1,0 +1,76 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Data transformations
+
+Load Dependencies
+```{r warning=FALSE, echo = TRUE, results = 'hide',message=FALSE}
+# Load the required packages
+library(plyr)
+library(dplyr)
+library(data.table)
+library(magrittr)
+library(lubridate)
+library(scales)  
+library(ggplot2)
+```
+
+Data transformations to get the dataset at transaction level
+```{r warning=FALSE}
+#Loading the data
+shop<-read.csv("Central Perk Item Sales Summary 2016.csv",stringsAsFactors = F)
+shop1<-read.csv("Central Perk Item Sales Summary 2017.csv",stringsAsFactors = F)
+shop2<-read.csv("Central Perk Item Sales Summary 2018.csv",stringsAsFactors = F)
+
+#Combining the 3 years data 
+total <- rbind(shop,shop1,shop2)
+
+#Getting the dataset at transaction level
+
+# Trasaction table at date-time level which contains the name of the categories of all items
+# bought in a transaction
+trans<-select(total,Date,Time,Category)
+transactionData <- ddply(trans,c("Date","Time"),
+                         function(df1)paste(df1$Category,
+                                            collapse = ","))
+
+# Trasaction table at date-time level which contains the name of all the items
+# bought in a transaction
+trans1<-select(total,Date,Time,Item)
+transactionData1 <- ddply(trans1,c("Date","Time"),
+                          function(df1)paste(df1$Item,
+                                             collapse = ","))
+
+# Trasaction table at date-time level which contains the size of all the items
+# bought in a transaction
+trans2<-select(total,Date,Time,Price.Point.Name)
+transactionData2 <- ddply(trans2,c("Date","Time"),
+                          function(df1)paste(df1$Price.Point.Name,
+                                             collapse = ","))
+
+#Combining these transactions table in a single dataset
+
+transaction_final<-inner_join(transactionData,transactionData1,by=c("Date","Time"))
+transaction_final1<-inner_join(transaction_final,transactionData2,by=c("Date","Time"))
+colnames(transaction_final1)<-c("Date","Time","Category","Item","Price_point_name")
+
+#Getting the transaction size for each transaction
+total1<-total%>%
+  group_by(Date,Time) %>%
+  summarize(size = n())
+transaction_final1<-inner_join(transaction_final,total1,by=c("Date","Time"))
+
+#Getting the net sales for each transaction
+total$sales = as.numeric(gsub("\\$", "", total$Net.Sales))
+total2<-total%>%
+  group_by(Date,Time) %>%
+  summarize(sales = sum(sales))
+
+#Final dataset which contains the necessary details for each transaction
+transaction_final2<-inner_join(transaction_final1,total2,by=c("Date","Time"))
+```
+
+

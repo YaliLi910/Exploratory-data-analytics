@@ -1,0 +1,164 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+Load Dependencies
+```{r warning=FALSE, echo = TRUE, results = 'hide',message=FALSE}
+# Load the required packages
+library(dplyr)
+library(data.table)
+library(magrittr)
+library(lubridate)
+library(scales)  
+library(ggplot2)
+```
+
+### Are Central Perk’s Customers Loyal?
+
+*Execution and Results* <br>
+
+An important piece of understanding the loyalty of Central Perk's customers is to explore the frequency of the customer visits. We look at the frequency of customer visits taking into account the time when they became our customer to know our repeat customers.
+
+```{r warning=FALSE}
+#Loading the data and creating a single dataset from the three years data
+shop<-read.csv("Central Perk Item Sales Summary 2016.csv",stringsAsFactors = F)
+shop1<-read.csv("Central Perk Item Sales Summary 2017.csv",stringsAsFactors = F)
+shop2<-read.csv("Central Perk Item Sales Summary 2018.csv",stringsAsFactors = F)
+total <- rbind(shop,shop1,shop2)
+nrow(total)
+```
+
+Removing the customers with NA value as there is no way of knowing whether they visited us again
+
+```{r warning=FALSE}
+total1<-filter(total,total$Customer.ID!='NA')
+nrow(total1)
+```
+
+Getting the number of vists per customer to know our loyal customers
+
+```{r warning=FALSE}
+#Number of items per customer visits
+total2<-total1 %>%
+  group_by(Customer.ID,Date,Time) %>%
+  summarize(number_items = n()) 
+
+#Number of vists of a customer in a day
+shop2<-total2 %>%
+  group_by(Customer.ID,Date) %>%
+  summarize(number_visits_day = n()) 
+
+#Getting month and year from date as we want to know the average customer's vist frequency per month
+shop2$date1<-mdy(shop2$Date)
+shop2$mon<-month(shop2$date1)
+shop2$yr<-year(shop2$date1)
+
+#Total number of vists of a customer in a given month-year
+shop3<-shop2 %>%
+  group_by(Customer.ID,mon,yr) %>%
+  summarize(number_vists = n()) 
+
+#find the starting month for a customer
+shop3$day<-1
+shop3$date_new <- as.Date(with(shop3, paste(yr, mon, day,sep="-")), "%Y-%m-%d")
+shop4<-shop3 %>%
+  group_by(Customer.ID) %>%
+  summarize(start_mnth = min(date_new))
+
+#Fixing the ending month as August,2018
+shop4$end_mnth<-max(shop3$date_new)
+
+#Finding the total duration of our customer engagement in terms of number of months
+shop4$diff<-interval(ymd(shop4$start_mnth),ymd(shop4$end_mnth)) %/% months(1)
+
+#total number of visits by a customer from his starting month
+shop5<-shop3 %>%
+  group_by(Customer.ID) %>%
+  summarize(total_vists=sum(number_vists)) 
+
+#Calculating the monthly average of the number of visits by a customer to establish their loyalty
+shop6<-inner_join(shop5,shop4,by="Customer.ID")
+shop6$Visits_per_month<-shop6$total_vists/shop6$diff
+shop6$Visits_per_month1<-ifelse(shop6$start_mnth==shop6$end_mnth,shop6$total_vists,
+                                 shop6$Visits_per_month)
+```
+
+Filtering the customers based on the different frequency of their visits and counting the total number of customers who are above different frequency thresholds.
+
+```{r warning=FALSE}
+#Finding total number of unique customers
+total_cust<-as.data.frame(unique(total1$Customer.ID))
+total_customers<-nrow(total_cust)
+
+# Frequency of average monthly visits greator or equal to 1
+shop7<-filter(shop6,Visits_per_month1>=1)
+more_than_or_equal_to_one=nrow(shop7)
+p1=(more_than_or_equal_to_one/total_customers)*100
+p1
+```
+
+```{r warning=FALSE}
+# Frequency of average monthly visits greator or equal to 2
+shop7<-filter(shop6,Visits_per_month1>=2)
+more_than_or_equal_to_two=nrow(shop7)
+p2=(more_than_or_equal_to_two/total_customers)*100
+p2
+```
+
+```{r warning=FALSE}
+# Frequency of average monthly visits greator or equal to 1
+shop7<-filter(shop6,Visits_per_month1>=3)
+more_than_or_equal_to_three=nrow(shop7)
+p3=(more_than_or_equal_to_three/total_customers)*100
+p3
+```
+
+```{r warning=FALSE}
+# Frequency of average monthly visits greator or equal to 1
+shop7<-filter(shop6,Visits_per_month1>=4)
+more_than_or_equal_to_four=nrow(shop7)
+p4=(more_than_or_equal_to_four/total_customers)*100
+p4
+```
+
+```{r warning=FALSE}
+# Frequency of average monthly visits greator or equal to 1
+shop7<-filter(shop6,Visits_per_month1>=5)
+more_than_or_equal_to_five=nrow(shop7)
+p5=(more_than_or_equal_to_five/total_customers)*100
+p5
+```
+
+Getting the final dataset which has percentage of customers according to their average monthly visits frequency 
+
+```{r warning=FALSE}
+x=c(1,2,3,4,5)
+y=c(p1,p2,p3,p4,p5)
+z=z=data.frame(x,y)
+
+#Plotting the Customer proportion vs Visits frequency
+ggplot(z,aes(x,y)) + 
+  geom_point() +
+  geom_line()+
+  xlab("Visits_frequency_per_month") + 
+  ylab('Proportion of customers') + ggtitle('Customer proportion vs Visits frequency')
+```
+
+*Interpretation* <br>
+
+We see that the percentage of customers who visits the coffee shop once a month or more 
+on average is 11.4%. This is our best case scenario of repeat customers. If we increase the
+threshold of average monthly visits frequency to 2,3,4 etc. the percentage of customers meeting
+this threshold falls with a steep slope. There are only 0.04% of customers who visit the
+coffee shop equal to or more than 5 times.
+
+*Conclusion* <br>
+
+By looking at our customers visits frequency we’ve gained some insights into how many of 
+our customers are repeat customers which can be further identified using the right frequency threshold by business. Suppose, if we take once a month as threshold to define the customer 
+loyalty then we can probe these customers to increase the frequency of their visits or
+increase transaction size by directing our marketing efforts toward this customer base instead 
+of the whole customer base.
+
